@@ -305,47 +305,6 @@ export default function DetectionPage() {
               </div>
             </div>
 
-            {/* Analysis Controls */}
-            <div className="card bg-gradient-to-br from-space-navy/90 to-space-purple/10 border border-space-purple/30 shadow-2xl">
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-space-accent to-space-purple rounded-lg flex items-center justify-center mr-4">
-                  <Settings className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-white">Analysis Controls</h2>
-                  <p className="text-gray-400 text-sm">Configure and run the classification</p>
-                </div>
-              </div>
-              
-              <div className="space-y-6">
-                <button
-                  onClick={handleAnalysis}
-                  disabled={isAnalyzing}
-                  className="w-full bg-gradient-to-r from-space-accent to-space-purple hover:from-space-accent/90 hover:to-space-purple/90 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl"
-                >
-                  {isAnalyzing ? (
-                    <div className="flex items-center justify-center space-x-3">
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span className="text-lg">Analyzing Parameters...</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center space-x-3">
-                      <Play className="w-5 h-5" />
-                      <span className="text-lg">Classify Exoplanet</span>
-                    </div>
-                  )}
-                </button>
-
-                {showResults && (
-                  <button className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                    <div className="flex items-center justify-center space-x-3">
-                      <Download className="w-5 h-5" />
-                    <span>Export Results</span>
-                    </div>
-                  </button>
-                )}
-              </div>
-            </div>
           </div>
 
           {/* Right Panel - Visualization & Results */}
@@ -430,6 +389,48 @@ export default function DetectionPage() {
               </div>
             </div>
 
+            {/* Analysis Controls */}
+            <div className="card bg-gradient-to-br from-space-navy/90 to-space-purple/10 border border-space-purple/30 shadow-2xl">
+              <div className="flex items-center mb-6">
+                <div className="w-12 h-12 bg-gradient-to-br from-space-accent to-space-purple rounded-lg flex items-center justify-center mr-4">
+                  <Settings className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-white">Analysis Controls</h2>
+                  <p className="text-gray-400 text-sm">Configure and run the classification</p>
+                </div>
+              </div>
+              
+              <div className="space-y-6">
+                <button
+                  onClick={handleAnalysis}
+                  disabled={isAnalyzing}
+                  className="w-full bg-gradient-to-r from-space-accent to-space-purple hover:from-space-accent/90 hover:to-space-purple/90 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl"
+                >
+                  {isAnalyzing ? (
+                    <div className="flex items-center justify-center space-x-3">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span className="text-lg">Analyzing Parameters...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center space-x-3">
+                      <Play className="w-5 h-5" />
+                      <span className="text-lg">Classify Exoplanet</span>
+                    </div>
+                  )}
+                </button>
+
+                {showResults && (
+                  <button className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    <div className="flex items-center justify-center space-x-3">
+                      <Download className="w-5 h-5" />
+                      <span>Export Results</span>
+                    </div>
+                  </button>
+                )}
+              </div>
+            </div>
+
             {/* Detection Results */}
             {showResults && (
               <DetectionResults 
@@ -438,49 +439,6 @@ export default function DetectionPage() {
                 formData={formData}
               />
             )}
-
-            {/* Status Panel */}
-            <div className="card bg-gradient-to-br from-space-navy/90 to-space-purple/10 border border-space-purple/30 shadow-2xl">
-              <div className="flex items-center mb-8">
-                <div className="w-12 h-12 bg-gradient-to-br from-space-accent to-space-purple rounded-lg flex items-center justify-center mr-4">
-                  <Zap className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-white">Analysis Status</h2>
-                  <p className="text-gray-400 text-sm">Real-time processing status</p>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-5 bg-gradient-to-r from-space-purple/20 to-space-accent/10 rounded-lg border border-space-purple/30 backdrop-blur-sm">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-4 h-4 bg-green-400 rounded-full shadow-lg"></div>
-                    <span className="text-white font-semibold text-lg">Parameters Entered</span>
-                  </div>
-                  <span className="text-green-400 text-sm font-medium bg-green-400/20 px-3 py-1 rounded-full">Ready</span>
-                </div>
-
-                <div className="flex items-center justify-between p-5 bg-gradient-to-r from-space-purple/20 to-space-accent/10 rounded-lg border border-space-purple/30 backdrop-blur-sm">
-                  <div className="flex items-center space-x-4">
-                    <div className={`w-4 h-4 rounded-full shadow-lg ${isAnalyzing ? 'bg-yellow-400 animate-pulse' : 'bg-green-400'}`}></div>
-                    <span className="text-white font-semibold text-lg">ML Classification</span>
-                  </div>
-                  <span className={`text-sm font-medium px-3 py-1 rounded-full ${isAnalyzing ? 'text-yellow-400 bg-yellow-400/20' : 'text-green-400 bg-green-400/20'}`}>
-                    {isAnalyzing ? 'In Progress' : 'Ready'}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between p-5 bg-gradient-to-r from-space-purple/20 to-space-accent/10 rounded-lg border border-space-purple/30 backdrop-blur-sm">
-                  <div className="flex items-center space-x-4">
-                    <div className={`w-4 h-4 rounded-full shadow-lg ${showResults ? 'bg-green-400' : 'bg-gray-500'}`}></div>
-                    <span className="text-white font-semibold text-lg">Results Available</span>
-                  </div>
-                  <span className={`text-sm font-medium px-3 py-1 rounded-full ${showResults ? 'text-green-400 bg-green-400/20' : 'text-gray-400 bg-gray-400/20'}`}>
-                    {showResults ? 'Complete' : 'Pending'}
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

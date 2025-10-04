@@ -53,7 +53,7 @@ export default function HomePage() {
                 <span>Start Detection</span>
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <Link href="/database" className="btn-primary text-lg px-8 py-4 flex items-center space-x-2" onClick={handleNavigation}>
+              <Link href="/database" className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-lg px-8 py-4 flex items-center space-x-2 rounded-lg font-semibold hover:shadow-lg hover:shadow-red-500/25 transition-all duration-300" onClick={handleNavigation}>
                 <Database className="w-5 h-5" />
                 <span>Explore Database</span>
               </Link>
