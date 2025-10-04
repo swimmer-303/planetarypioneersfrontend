@@ -86,7 +86,7 @@ export default function DetectionPage() {
             <Database className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-            ML <span className="text-gradient bg-gradient-to-r from-space-accent to-space-purple bg-clip-text text-transparent">Detection</span> Engine
+            ML <span className="bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">Detection</span> Engine
           </h1>
           <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
             Enter exoplanet parameters to classify whether it's <span className="text-green-400 font-semibold">confirmed</span>, <span className="text-yellow-400 font-semibold">candidate</span>, 
