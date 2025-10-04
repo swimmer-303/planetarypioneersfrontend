@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-space-accent to-pink-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-space-accent/25 transition-all duration-300;
+  }
+  
+  .btn-secondary {
+    @apply border-2 border-space-accent text-space-accent px-6 py-3 rounded-lg font-semibold hover:bg-space-accent hover:text-white transition-all duration-300;
+  }
+  
+  .card {
+    @apply bg-space-navy/50 backdrop-blur-sm border border-space-purple/30 rounded-xl p-6 shadow-xl;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-white via-blue-200 to-space-accent bg-clip-text text-transparent;
+  }
+}
