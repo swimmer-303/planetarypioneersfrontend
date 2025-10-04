@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { Play, Download, Settings, BarChart3, Zap, CheckCircle, Database } from 'lucide-react'
 import DetectionResults from '@/components/DetectionResults'
-import MLParameters from '@/components/MLParameters'
 
 interface ExoplanetInput {
   num_stars: number
@@ -305,9 +304,6 @@ export default function DetectionPage() {
                 </div>
               </div>
             </div>
-
-            {/* ML Parameters */}
-            <MLParameters />
 
             {/* Analysis Controls */}
             <div className="card bg-gradient-to-br from-space-navy/90 to-space-purple/10 border border-space-purple/30 shadow-2xl">

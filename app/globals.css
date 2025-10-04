@@ -15,7 +15,7 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-gradient-to-r from-space-accent to-pink-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-space-accent/25 transition-all duration-300;
+    @apply bg-gradient-to-r from-pink-500 to-space-accent text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-space-accent/25 transition-all duration-300;
   }
   
   .btn-secondary {
