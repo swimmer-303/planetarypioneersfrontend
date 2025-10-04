@@ -65,8 +65,6 @@ export default function ExoplanetVisualization() {
 
   const handleSunClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    console.log('Sun clicked!', sunClicks + 1)
-    alert(`Sun clicked! Count: ${sunClicks + 1}`)
     const newClickCount = sunClicks + 1
     setSunClicks(newClickCount)
     
@@ -78,32 +76,120 @@ export default function ExoplanetVisualization() {
 
   const generateSpaceDust = () => {
     const dust = []
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 80; i++) {
       dust.push({
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
         size: Math.random() * 4 + 1,
-        color: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'][Math.floor(Math.random() * 7)]
+        color: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#3b82f6', '#8b5cf6', '#a855f7', '#6366f1', '#8b5cf6'][Math.floor(Math.random() * 12)]
       })
     }
     setSpaceDust(dust)
   }
 
   return (
-    <div className="relative w-full h-96 bg-space-dark/50 rounded-2xl border border-space-purple/30 overflow-hidden">
-      {/* Debug Test Button */}
-      <button 
-        onClick={handleSunClick}
-        className="absolute top-2 left-2 z-50 bg-red-500 text-white px-2 py-1 text-xs rounded"
-      >
-        Test Click
-      </button>
+    <>
+      {/* Site-wide Supernova Effects */}
+      {isSupernova && (
+        <>
+          {/* Site-wide Space Dust */}
+          {spaceDust.map((dust) => (
+            <motion.div
+              key={dust.id}
+              className="fixed rounded-full opacity-80 pointer-events-none z-50"
+              style={{
+                left: `${dust.x}vw`,
+                top: `${dust.y}vh`,
+                width: dust.size,
+                height: dust.size,
+                backgroundColor: dust.color,
+                boxShadow: `0 0 ${dust.size * 2}px ${dust.color}`
+              }}
+              animate={{
+                scale: [0, 1, 1.5, 0],
+                rotate: [0, 360],
+                opacity: [0, 1, 0.8, 0]
+              }}
+              transition={{
+                duration: 3 + Math.random() * 2,
+                delay: Math.random() * 2,
+                repeat: Infinity,
+                ease: 'easeInOut'
+              }}
+            />
+          ))}
+          
+          {/* Site-wide Cosmic Cloud Effects */}
+          <motion.div
+            className="fixed inset-0 pointer-events-none z-40"
+            animate={{
+              background: [
+                'radial-gradient(circle at 20% 30%, rgba(255, 100, 0, 0.15) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.2) 0%, transparent 50%), radial-gradient(circle at 50% 20%, rgba(147, 51, 234, 0.18) 0%, transparent 45%)',
+                'radial-gradient(circle at 70% 20%, rgba(255, 200, 0, 0.2) 0%, transparent 60%), radial-gradient(circle at 30% 80%, rgba(37, 99, 235, 0.25) 0%, transparent 55%), radial-gradient(circle at 80% 50%, rgba(168, 85, 247, 0.22) 0%, transparent 50%)',
+                'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%), radial-gradient(circle at 10% 60%, rgba(29, 78, 216, 0.2) 0%, transparent 45%), radial-gradient(circle at 90% 40%, rgba(139, 92, 246, 0.18) 0%, transparent 40%)',
+                'radial-gradient(circle at 40% 10%, rgba(255, 100, 0, 0.15) 0%, transparent 50%), radial-gradient(circle at 60% 90%, rgba(59, 130, 246, 0.2) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(147, 51, 234, 0.18) 0%, transparent 45%)'
+              ]
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: 'easeInOut'
+            }}
+          />
+          
+          {/* Additional Blue-Purple Cosmic Clouds */}
+          <motion.div
+            className="fixed inset-0 pointer-events-none z-39"
+            animate={{
+              background: [
+                'radial-gradient(ellipse at 25% 25%, rgba(59, 130, 246, 0.3) 0%, rgba(147, 51, 234, 0.2) 30%, transparent 60%)',
+                'radial-gradient(ellipse at 75% 75%, rgba(37, 99, 235, 0.25) 0%, rgba(168, 85, 247, 0.3) 40%, transparent 70%)',
+                'radial-gradient(ellipse at 50% 10%, rgba(29, 78, 216, 0.2) 0%, rgba(139, 92, 246, 0.25) 35%, transparent 65%)',
+                'radial-gradient(ellipse at 10% 50%, rgba(59, 130, 246, 0.3) 0%, rgba(147, 51, 234, 0.2) 30%, transparent 60%)'
+              ]
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: 1
+            }}
+          />
+          
+          {/* Site-wide Explosion Shockwave */}
+          <motion.div
+            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-45"
+            animate={{
+              scale: [0, 5, 10],
+              opacity: [1, 0.5, 0]
+            }}
+            transition={{
+              duration: 2,
+              ease: 'easeOut'
+            }}
+          >
+            <div className="w-32 h-32 border-2 border-yellow-400 rounded-full opacity-50"></div>
+          </motion.div>
+
+          {/* Supernova Message */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="fixed top-4 left-4 right-4 bg-red-900/80 backdrop-blur-sm border border-red-500/50 rounded-lg px-4 py-3 text-center z-50"
+          >
+            <div className="text-red-200 font-bold text-lg">🌟 SUPERNOVA! 🌟</div>
+            <div className="text-red-300 text-sm">The star has exploded across the universe! Refresh to reset.</div>
+          </motion.div>
+        </>
+      )}
+      
+      <div className="relative w-full h-96 bg-space-dark/50 rounded-2xl border border-space-purple/30 overflow-hidden">
       {/* Central Star */}
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
-        <motion.div
-          className={`cursor-pointer bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-400/50 border-2 border-white/50 ${
-            isSupernova ? 'from-red-500 to-yellow-500' : ''
+        <div
+          className={`cursor-pointer bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-400/50 border-2 border-white/50 hover:scale-110 transition-transform animate-pulse ${
+            isSupernova ? 'from-red-500 to-yellow-500 animate-spin' : ''
           }`}
           style={{
             width: Math.max(64, 32 + (sunClicks * 8)),
@@ -111,41 +197,12 @@ export default function ExoplanetVisualization() {
             minWidth: '64px',
             minHeight: '64px',
           }}
-          animate={isSupernova ? {
-            scale: [1, 2, 3, 4, 5],
-            rotate: [0, 180, 360],
-            boxShadow: [
-              '0 0 50px rgba(255, 0, 0, 0.8)',
-              '0 0 100px rgba(255, 100, 0, 1)',
-              '0 0 150px rgba(255, 200, 0, 1)',
-              '0 0 200px rgba(255, 255, 0, 1)',
-              '0 0 300px rgba(255, 255, 255, 1)'
-            ]
-          } : {
-            scale: [1, 1.1, 1],
-            boxShadow: [
-              '0 0 20px rgba(255, 193, 7, 0.5)',
-              '0 0 40px rgba(255, 193, 7, 0.8)',
-              '0 0 20px rgba(255, 193, 7, 0.5)'
-            ],
-            opacity: [0.8, 1, 0.8]
-          }}
-          transition={isSupernova ? {
-            duration: 2,
-            ease: 'easeOut'
-          } : {
-            duration: 3,
-            repeat: Infinity,
-            ease: 'easeInOut'
-          }}
           onClick={handleSunClick}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
         />
       </div>
 
-      {/* Orbiting Planets */}
-      {planets.map((planet, index) => (
+      {/* Orbiting Planets - Hidden during supernova */}
+      {!isSupernova && planets.map((planet, index) => (
         <motion.div
           key={planet.id}
           className="absolute top-1/2 left-1/2 pointer-events-none z-10"
@@ -184,73 +241,8 @@ export default function ExoplanetVisualization() {
         </motion.div>
       ))}
 
-      {/* Space Dust and Cosmic Clouds during Supernova */}
-      {isSupernova && (
-        <>
-          {/* Animated Space Dust */}
-          {spaceDust.map((dust) => (
-            <motion.div
-              key={dust.id}
-              className="absolute rounded-full opacity-80"
-              style={{
-                left: `${dust.x}%`,
-                top: `${dust.y}%`,
-                width: dust.size,
-                height: dust.size,
-                backgroundColor: dust.color,
-                boxShadow: `0 0 ${dust.size * 2}px ${dust.color}`
-              }}
-              animate={{
-                scale: [0, 1, 1.5, 0],
-                rotate: [0, 360],
-                opacity: [0, 1, 0.8, 0]
-              }}
-              transition={{
-                duration: 3 + Math.random() * 2,
-                delay: Math.random() * 2,
-                repeat: Infinity,
-                ease: 'easeInOut'
-              }}
-            />
-          ))}
-          
-          {/* Cosmic Cloud Effects */}
-          <motion.div
-            className="absolute inset-0 pointer-events-none"
-            animate={{
-              background: [
-                'radial-gradient(circle at 50% 50%, rgba(255, 100, 0, 0.1) 0%, transparent 50%)',
-                'radial-gradient(circle at 50% 50%, rgba(255, 200, 0, 0.2) 0%, transparent 60%)',
-                'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%)',
-                'radial-gradient(circle at 50% 50%, rgba(255, 100, 0, 0.1) 0%, transparent 50%)'
-              ]
-            }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: 'easeInOut'
-            }}
-          />
-          
-          {/* Explosion Shockwave */}
-          <motion.div
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            animate={{
-              scale: [0, 5, 10],
-              opacity: [1, 0.5, 0]
-            }}
-            transition={{
-              duration: 2,
-              ease: 'easeOut'
-            }}
-          >
-            <div className="w-32 h-32 border-2 border-yellow-400 rounded-full opacity-50"></div>
-          </motion.div>
-        </>
-      )}
-
-      {/* Planet Info Panel */}
-      {selectedPlanet && (
+      {/* Planet Info Panel - Hidden during supernova */}
+      {!isSupernova && selectedPlanet && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -273,34 +265,13 @@ export default function ExoplanetVisualization() {
         </motion.div>
       )}
 
-      {/* Click Counter */}
-      {sunClicks > 0 && !isSupernova && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="absolute top-4 right-4 bg-space-navy/80 backdrop-blur-sm border border-space-purple/30 rounded-lg px-3 py-2 text-sm text-white"
-        >
-          Sun clicks: {sunClicks}/5
-        </motion.div>
-      )}
-
-      {/* Supernova Message */}
-      {isSupernova && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute top-4 left-4 right-4 bg-red-900/80 backdrop-blur-sm border border-red-500/50 rounded-lg px-4 py-3 text-center"
-        >
-          <div className="text-red-200 font-bold text-lg">🌟 SUPERNOVA! 🌟</div>
-          <div className="text-red-300 text-sm">The star has exploded! Refresh to reset.</div>
-        </motion.div>
-      )}
 
       {/* Background Grid */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-1/2 left-0 w-full h-px bg-white"></div>
         <div className="absolute top-0 left-1/2 w-px h-full bg-white"></div>
       </div>
-    </div>
+      </div>
+    </>
   )
 }
