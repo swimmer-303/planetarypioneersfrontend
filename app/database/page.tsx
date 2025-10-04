@@ -6,8 +6,24 @@ import { useSearchParams } from 'next/navigation'
 import { Search, Filter, Download, Star, Globe, Calendar } from 'lucide-react'
 import ExoplanetDataBrowser from '@/components/ExoplanetDataBrowser'
 
+interface RecentExoplanet {
+  name: string
+  hostname: string
+  type: string
+  distance: number
+  period: number
+  mass: number
+  radius: number
+  temperature: number
+  discovered: number
+  status: string
+  discoveryMethod: string
+}
+
 export default function DatabasePage() {
   const [showDataBrowser, setShowDataBrowser] = useState(false)
+  const [recentExoplanets, setRecentExoplanets] = useState<RecentExoplanet[]>([])
+  const [loadingRecent, setLoadingRecent] = useState(true)
   const searchParams = useSearchParams()
   
   useEffect(() => {
@@ -15,54 +31,83 @@ export default function DatabasePage() {
     if (searchParams.get('browse') === 'true') {
       setShowDataBrowser(true)
     }
+    
+    // Fetch recent discoveries
+    fetchRecentDiscoveries()
   }, [searchParams])
-  
-  const sampleExoplanets = [
-    {
-      name: 'Kepler-452b',
-      type: 'Super Earth',
-      distance: 1400,
-      period: 384.8,
-      mass: 5.0,
-      radius: 1.6,
-      temperature: 265,
-      discovered: 2015,
-      status: 'Confirmed'
-    },
-    {
-      name: 'Proxima Centauri b',
-      type: 'Terrestrial',
-      distance: 4.2,
-      period: 11.2,
-      mass: 1.27,
-      radius: 1.1,
-      temperature: 234,
-      discovered: 2016,
-      status: 'Confirmed'
-    },
-    {
-      name: 'TRAPPIST-1e',
-      type: 'Terrestrial',
-      distance: 40,
-      period: 6.1,
-      mass: 0.69,
-      radius: 0.92,
-      temperature: 251,
-      discovered: 2017,
-      status: 'Confirmed'
-    },
-    {
-      name: 'HD 209458 b',
-      type: 'Hot Jupiter',
-      distance: 150,
-      period: 3.5,
-      mass: 0.69,
-      radius: 1.35,
-      temperature: 1130,
-      discovered: 1999,
-      status: 'Confirmed'
+
+  const fetchRecentDiscoveries = async () => {
+    try {
+      setLoadingRecent(true)
+      const response = await fetch('/exoplanet-data.csv')
+      const csvText = await response.text()
+      
+      // Parse CSV
+      const lines = csvText.split('\n')
+      const headerLine = lines.find(line => line.startsWith('pl_name,'))
+      
+      if (!headerLine) {
+        throw new Error('Could not find CSV header')
+      }
+      
+      const headers = headerLine.split(',')
+      const dataLines = lines.slice(lines.indexOf(headerLine) + 1)
+      
+      const parsedData: RecentExoplanet[] = dataLines
+        .filter(line => line.trim() && !line.startsWith('#'))
+        .map(line => {
+          const values = line.split(',')
+          return {
+            name: values[0] || '',
+            hostname: values[1] || '',
+            type: getPlanetType(values[21], values[29]), // Based on radius and mass
+            distance: parseFloat(values[79]) || 0, // sy_dist
+            period: parseFloat(values[13]) || 0, // pl_orbper
+            mass: parseFloat(values[29]) || 0, // pl_bmasse
+            radius: parseFloat(values[21]) || 0, // pl_rade
+            temperature: parseFloat(values[46]) || 0, // pl_eqt
+            discovered: parseInt(values[8]) || 0, // disc_year
+            status: values[3] === 'CONFIRMED' ? 'Confirmed' : 'Candidate', // disposition
+            discoveryMethod: values[7] || '' // discoverymethod
+          }
+        })
+        .filter(planet => planet.name && planet.name !== 'pl_name' && planet.discovered > 0)
+        .sort((a, b) => b.discovered - a.discovered) // Sort by discovery year, most recent first
+        .slice(0, 10) // Get top 10 most recent
+      
+      setRecentExoplanets(parsedData)
+    } catch (err) {
+      console.error('Error loading recent discoveries:', err)
+      // Fallback to sample data if real data fails
+      setRecentExoplanets([
+        {
+          name: 'Kepler-452b',
+          hostname: 'Kepler-452',
+          type: 'Super Earth',
+          distance: 1400,
+          period: 384.8,
+          mass: 5.0,
+          radius: 1.6,
+          temperature: 265,
+          discovered: 2015,
+          status: 'Confirmed',
+          discoveryMethod: 'Transit'
+        }
+      ])
+    } finally {
+      setLoadingRecent(false)
     }
-  ]
+  }
+
+  const getPlanetType = (radius: string, mass: string): string => {
+    const r = parseFloat(radius) || 0
+    const m = parseFloat(mass) || 0
+    
+    if (r < 1.5 && m < 3) return 'Terrestrial'
+    if (r < 2.5 && m < 10) return 'Super Earth'
+    if (r < 4 && m < 17) return 'Neptune-like'
+    return 'Gas Giant'
+  }
 
   return (
     <div className="min-h-screen py-8">
@@ -208,76 +253,97 @@ export default function DatabasePage() {
         {/* Data Browser */}
         {showDataBrowser && <ExoplanetDataBrowser />}
 
-        {/* Exoplanet Table */}
+        {/* Recent Discoveries Table */}
         <div className="card">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-white">Recent Discoveries</h2>
-            <button className="btn-secondary flex items-center space-x-2">
-              <Download className="w-4 h-4" />
-              <span>Export Data</span>
-            </button>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-space-purple/30">
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Name</th>
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Type</th>
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Distance (ly)</th>
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Period (days)</th>
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Mass (M⊕)</th>
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Radius (R⊕)</th>
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Temp (K)</th>
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Discovered</th>
-                  <th className="text-left py-3 px-4 text-gray-300 font-medium">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sampleExoplanets.map((planet, index) => (
-                  <tr key={index} className="border-b border-space-purple/20 hover:bg-space-purple/10">
-                    <td className="py-4 px-4">
-                      <div className="flex items-center space-x-2">
-                        <Star className="w-4 h-4 text-yellow-400" />
-                        <span className="font-medium text-white">{planet.name}</span>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 text-gray-300">{planet.type}</td>
-                    <td className="py-4 px-4 text-gray-300">{planet.distance}</td>
-                    <td className="py-4 px-4 text-gray-300">{planet.period}</td>
-                    <td className="py-4 px-4 text-gray-300">{planet.mass}</td>
-                    <td className="py-4 px-4 text-gray-300">{planet.radius}</td>
-                    <td className="py-4 px-4 text-gray-300">{planet.temperature}</td>
-                    <td className="py-4 px-4 text-gray-300">{planet.discovered}</td>
-                    <td className="py-4 px-4">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-400/20 text-green-400 border border-green-400/30">
-                        {planet.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Pagination */}
-          <div className="flex items-center justify-between mt-6 pt-6 border-t border-space-purple/30">
-            <div className="text-gray-400 text-sm">
-              Showing 1-4 of 5,432 exoplanets
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-400">
+                {loadingRecent ? 'Loading...' : `Showing ${recentExoplanets.length} most recent discoveries`}
+              </span>
+              <button className="btn-secondary flex items-center space-x-2">
+                <Download className="w-4 h-4" />
+                <span>Export Data</span>
+              </button>
             </div>
-            <div className="flex space-x-2">
-              <button className="px-3 py-2 bg-space-navy border border-space-purple/30 rounded-lg text-gray-300 hover:text-white hover:border-space-accent transition-colors">
-                Previous
-              </button>
-              <button className="px-3 py-2 bg-space-accent text-white rounded-lg">
-                1
-              </button>
-              <button className="px-3 py-2 bg-space-navy border border-space-purple/30 rounded-lg text-gray-300 hover:text-white hover:border-space-accent transition-colors">
-                2
-              </button>
-              <button className="px-3 py-2 bg-space-navy border border-space-purple/30 rounded-lg text-gray-300 hover:text-white hover:border-space-accent transition-colors">
-                Next
-              </button>
+          </div>
+
+          {loadingRecent ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="w-8 h-8 border-2 border-space-accent border-t-transparent rounded-full animate-spin mr-3"></div>
+              <span className="text-gray-300">Loading recent discoveries...</span>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-space-purple/30">
+                    <th className="text-left py-3 px-4 text-gray-300 font-medium">Name</th>
+                    <th className="text-left py-3 px-4 text-gray-300 font-medium">Type</th>
+                    <th className="text-left py-3 px-4 text-gray-300 font-medium">Distance (ly)</th>
+                    <th className="text-left py-3 px-4 text-gray-300 font-medium">Period (days)</th>
+                    <th className="text-left py-3 px-4 text-gray-300 font-medium">Mass (M⊕)</th>
+                    <th className="text-left py-3 px-4 text-gray-300 font-medium">Radius (R⊕)</th>
+                    <th className="text-left py-3 px-4 text-gray-300 font-medium">Temp (K)</th>
+                    <th className="text-left py-3 px-4 text-gray-300 font-medium">Discovered</th>
+                    <th className="text-left py-3 px-4 text-gray-300 font-medium">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentExoplanets.map((planet, index) => (
+                    <tr key={index} className="border-b border-space-purple/20 hover:bg-space-purple/10">
+                      <td className="py-4 px-4">
+                        <div className="flex items-center space-x-2">
+                          <Star className="w-4 h-4 text-yellow-400" />
+                          <div>
+                            <span className="font-medium text-white">{planet.name}</span>
+                            <div className="text-xs text-gray-500">{planet.hostname}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4 text-gray-300">{planet.type}</td>
+                      <td className="py-4 px-4 text-gray-300">
+                        {planet.distance > 0 ? planet.distance.toFixed(1) : 'N/A'}
+                      </td>
+                      <td className="py-4 px-4 text-gray-300">
+                        {planet.period > 0 ? planet.period.toFixed(2) : 'N/A'}
+                      </td>
+                      <td className="py-4 px-4 text-gray-300">
+                        {planet.mass > 0 ? planet.mass.toFixed(2) : 'N/A'}
+                      </td>
+                      <td className="py-4 px-4 text-gray-300">
+                        {planet.radius > 0 ? planet.radius.toFixed(2) : 'N/A'}
+                      </td>
+                      <td className="py-4 px-4 text-gray-300">
+                        {planet.temperature > 0 ? Math.round(planet.temperature) : 'N/A'}
+                      </td>
+                      <td className="py-4 px-4 text-gray-300">{planet.discovered}</td>
+                      <td className="py-4 px-4">
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${
+                          planet.status === 'Confirmed' 
+                            ? 'bg-green-400/20 text-green-400 border-green-400/30' 
+                            : 'bg-yellow-400/20 text-yellow-400 border-yellow-400/30'
+                        }`}>
+                          {planet.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Info Footer */}
+          <div className="mt-6 pt-6 border-t border-space-purple/30">
+            <div className="text-gray-400 text-sm">
+              <p className="mb-2">
+                <strong>Data Source:</strong> NASA Exoplanet Archive (October 2025)
+              </p>
+              <p>
+                Showing the 10 most recently discovered exoplanets from the archive. 
+                Discovery dates are based on the year the exoplanet was first published.
+              </p>
             </div>
           </div>
         </div>
