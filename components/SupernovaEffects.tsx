@@ -88,16 +88,6 @@ export default function SupernovaEffects() {
       >
         <div className="w-32 h-32 border-2 border-yellow-400 rounded-full opacity-50"></div>
       </motion.div>
-
-      {/* Supernova Message */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="fixed top-4 left-4 right-4 bg-red-900/80 backdrop-blur-sm border border-red-500/50 rounded-lg px-4 py-3 text-center z-50"
-      >
-        <div className="text-red-200 font-bold text-lg">🌟 SUPERNOVA! 🌟</div>
-        <div className="text-red-300 text-sm">The star has exploded across the universe! Refresh to reset.</div>
-      </motion.div>
     </>
   )
 }

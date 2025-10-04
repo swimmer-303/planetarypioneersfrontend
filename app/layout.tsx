@@ -8,6 +8,8 @@ import Footer from '@/components/Footer'
 import CopyProtection from '@/components/CopyProtection'
 import { LoadingProvider, useLoading } from '@/components/LoadingProvider'
 import LoadingScreen from '@/components/LoadingScreen'
+import { SupernovaProvider } from '@/components/SupernovaProvider'
+import SupernovaEffects from '@/components/SupernovaEffects'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,17 +21,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <LoadingProvider>
-          <CopyProtection />
-          <div className="min-h-screen flex flex-col">
-            <Navigation />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </div>
-          <LoadingScreenWrapper />
-        </LoadingProvider>
+        <SupernovaProvider>
+          <LoadingProvider>
+            <CopyProtection />
+            <div className="min-h-screen flex flex-col">
+              <Navigation />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
+            <LoadingScreenWrapper />
+            <SupernovaEffects />
+          </LoadingProvider>
+        </SupernovaProvider>
       </body>
     </html>
   )
