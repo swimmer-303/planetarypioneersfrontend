@@ -1,108 +1,128 @@
 'use client'
 
 import { useState } from 'react'
-import { Settings } from 'lucide-react'
-import { Slider } from '@/components/ui/slider'
+import { Settings, Brain, Zap, Shield } from 'lucide-react'
 
 interface MLParametersProps {
   className?: string
 }
 
 export default function MLParameters({ className }: MLParametersProps) {
-  const [sensitivity, setSensitivity] = useState([75])
-  const [noiseThreshold, setNoiseThreshold] = useState([30])
-  const [minTransitDuration, setMinTransitDuration] = useState([2])
-
   return (
-    <div className={`card ${className}`}>
-      <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-        <Settings className="w-6 h-6 mr-2" />
-        ML Parameters
-      </h2>
+    <div className={`card bg-gradient-to-br from-space-navy/90 to-space-purple/10 border border-space-purple/30 shadow-2xl ${className}`}>
+      <div className="flex items-center mb-8">
+        <div className="w-12 h-12 bg-gradient-to-br from-space-accent to-space-purple rounded-lg flex items-center justify-center mr-4">
+          <Settings className="w-6 h-6 text-white" />
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold text-white">ML Configuration</h2>
+          <p className="text-gray-400 text-sm">Auto-optimized classification settings</p>
+        </div>
+      </div>
       
       <div className="space-y-6">
-        {/* Detection Sensitivity */}
-        <div>
-          <label className="block text-white font-medium mb-2">
-            Detection Sensitivity: {sensitivity[0]}%
-          </label>
-          <Slider
-            value={sensitivity}
-            onValueChange={setSensitivity}
-            max={100}
-            min={0}
-            step={1}
-            className="w-full"
-          />
-          <p className="text-gray-400 text-sm mt-1">
-            Higher values detect more subtle signals but may increase false positives
-          </p>
+        {/* Auto-Detected Settings */}
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2 mb-4">
+            <Brain className="w-5 h-5 text-space-accent" />
+            <h3 className="text-white font-semibold text-lg">Auto-Detected Settings</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 gap-4">
+            <div className="bg-gradient-to-r from-space-purple/20 to-space-accent/10 rounded-lg p-4 border border-space-purple/30">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-white font-semibold">Classification Algorithm</div>
+                  <div className="text-gray-400 text-sm">Random Forest (Auto-selected)</div>
+                </div>
+                <div className="w-8 h-8 bg-green-400/20 rounded-full flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-green-400" />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-space-purple/20 to-space-accent/10 rounded-lg p-4 border border-space-purple/30">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-white font-semibold">Confidence Threshold</div>
+                  <div className="text-gray-400 text-sm">85% (Auto-optimized)</div>
+                </div>
+                <div className="w-8 h-8 bg-blue-400/20 rounded-full flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-blue-400" />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-space-purple/20 to-space-accent/10 rounded-lg p-4 border border-space-purple/30">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-white font-semibold">Training Data Split</div>
+                  <div className="text-gray-400 text-sm">80/20 (Auto-balanced)</div>
+                </div>
+                <div className="w-8 h-8 bg-yellow-400/20 rounded-full flex items-center justify-center">
+                  <Brain className="w-4 h-4 text-yellow-400" />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-space-purple/20 to-space-accent/10 rounded-lg p-4 border border-space-purple/30">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-white font-semibold">Max Tree Depth</div>
+                  <div className="text-gray-400 text-sm">12 (Auto-tuned)</div>
+                </div>
+                <div className="w-8 h-8 bg-purple-400/20 rounded-full flex items-center justify-center">
+                  <Settings className="w-4 h-4 text-purple-400" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Noise Threshold */}
-        <div>
-          <label className="block text-white font-medium mb-2">
-            Noise Threshold: {noiseThreshold[0]}%
-          </label>
-          <Slider
-            value={noiseThreshold}
-            onValueChange={setNoiseThreshold}
-            max={100}
-            min={0}
-            step={1}
-            className="w-full"
-          />
-          <p className="text-gray-400 text-sm mt-1">
-            Filters out noisy data points below this threshold
-          </p>
-        </div>
-
-        {/* Minimum Transit Duration */}
-        <div>
-          <label className="block text-white font-medium mb-2">
-            Min Transit Duration: {minTransitDuration[0]} hours
-          </label>
-          <Slider
-            value={minTransitDuration}
-            onValueChange={setMinTransitDuration}
-            max={24}
-            min={0.5}
-            step={0.5}
-            className="w-full"
-          />
-          <p className="text-gray-400 text-sm mt-1">
-            Minimum duration for a valid transit signal
-          </p>
-        </div>
-
-        {/* Algorithm Selection */}
-        <div>
-          <label className="block text-white font-medium mb-2">
-            Detection Algorithm
-          </label>
-          <select className="w-full bg-space-navy border border-space-purple/30 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-space-accent">
-            <option value="neural-network">Neural Network (Recommended)</option>
-            <option value="random-forest">Random Forest</option>
-            <option value="svm">Support Vector Machine</option>
-            <option value="ensemble">Ensemble Method</option>
-          </select>
+        {/* Feature Selection */}
+        <div className="pt-6 border-t border-space-purple/30">
+          <div className="flex items-center space-x-2 mb-4">
+            <Zap className="w-5 h-5 text-space-accent" />
+            <h3 className="text-white font-semibold text-lg">Active Features</h3>
+          </div>
+          <div className="space-y-3">
+            <label className="flex items-center space-x-3">
+              <input type="checkbox" defaultChecked className="rounded border-space-purple/30 bg-space-navy text-space-accent focus:ring-space-accent" />
+              <span className="text-gray-300">Stellar parameters (temp, radius, mass)</span>
+            </label>
+            <label className="flex items-center space-x-3">
+              <input type="checkbox" defaultChecked className="rounded border-space-purple/30 bg-space-navy text-space-accent focus:ring-space-accent" />
+              <span className="text-gray-300">Planetary parameters (radius, period)</span>
+            </label>
+            <label className="flex items-center space-x-3">
+              <input type="checkbox" defaultChecked className="rounded border-space-purple/30 bg-space-navy text-space-accent focus:ring-space-accent" />
+              <span className="text-gray-300">System properties (distance, magnitude)</span>
+            </label>
+            <label className="flex items-center space-x-3">
+              <input type="checkbox" defaultChecked className="rounded border-space-purple/30 bg-space-navy text-space-accent focus:ring-space-accent" />
+              <span className="text-gray-300">Discovery method & facility</span>
+            </label>
+          </div>
         </div>
 
         {/* Advanced Options */}
-        <div className="pt-4 border-t border-space-purple/30">
-          <h3 className="text-white font-medium mb-3">Advanced Options</h3>
+        <div className="pt-6 border-t border-space-purple/30">
+          <div className="flex items-center space-x-2 mb-4">
+            <Settings className="w-5 h-5 text-space-accent" />
+            <h3 className="text-white font-semibold text-lg">Advanced Options</h3>
+          </div>
           <div className="space-y-3">
             <label className="flex items-center space-x-3">
-              <input type="checkbox" className="rounded border-space-purple/30 bg-space-navy text-space-accent focus:ring-space-accent" />
-              <span className="text-gray-300">Enable multi-band analysis</span>
+              <input type="checkbox" defaultChecked className="rounded border-space-purple/30 bg-space-navy text-space-accent focus:ring-space-accent" />
+              <span className="text-gray-300">Cross-validation enabled</span>
             </label>
             <label className="flex items-center space-x-3">
-              <input type="checkbox" className="rounded border-space-purple/30 bg-space-navy text-space-accent focus:ring-space-accent" />
-              <span className="text-gray-300">Include radial velocity data</span>
+              <input type="checkbox" defaultChecked className="rounded border-space-purple/30 bg-space-navy text-space-accent focus:ring-space-accent" />
+              <span className="text-gray-300">Feature scaling active</span>
             </label>
             <label className="flex items-center space-x-3">
-              <input type="checkbox" className="rounded border-space-purple/30 bg-space-navy text-space-accent focus:ring-space-accent" />
-              <span className="text-gray-300">Apply stellar activity correction</span>
+              <input type="checkbox" defaultChecked className="rounded border-space-purple/30 bg-space-navy text-space-accent focus:ring-space-accent" />
+              <span className="text-gray-300">Missing value handling</span>
             </label>
           </div>
         </div>
