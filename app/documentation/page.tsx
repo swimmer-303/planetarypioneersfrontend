@@ -1,9 +1,18 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { asset } from '@/components/asset'
 
 export default function DocumentationPage() {
+  const [embedSrc, setEmbedSrc] = useState<string | null>(null)
+
+  useEffect(() => {
+    const absoluteDocUrl = window.location.origin + asset('/Documentation.docx')
+    const officeEmbed = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(absoluteDocUrl)}`
+    setEmbedSrc(officeEmbed)
+  }, [])
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
       <div className="card">
@@ -22,14 +31,17 @@ export default function DocumentationPage() {
         </div>
 
         <div className="bg-black/40 border border-space-purple/30 rounded-lg overflow-hidden">
-          {/* Many browsers cannot natively preview .docx; provide a fallback message. */}
-          <iframe
-            src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
-              typeof window !== 'undefined' ? window.location.origin + asset('/Documentation.docx') : ''
-            )}`}
-            className="w-full h-[70vh]"
-            title="Documentation Preview"
-          />
+          {embedSrc ? (
+            <iframe
+              src={embedSrc}
+              className="w-full h-[70vh]"
+              title="Documentation Preview"
+            />
+          ) : (
+            <div className="p-6 text-gray-400">
+              Loading preview...
+            </div>
+          )}
         </div>
 
         <p className="text-gray-400 text-sm mt-3">
