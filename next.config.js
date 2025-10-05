@@ -11,13 +11,16 @@ const nextConfig = {
     unoptimized: true,
     domains: ['api.placeholder.com'],
   },
-  // Configure basePath and assetPrefix when provided (e.g., "/repo-name")
+  // Configure basePath and assetPrefix when provided (e.g., "/repo-name").
+  // Fallback to relative assetPrefix for static hosting so CSS/JS load correctly.
   ...(basePath
     ? {
         basePath,
         assetPrefix: `${basePath}/`,
       }
-    : {}),
+    : {
+        assetPrefix: './',
+      }),
 }
 
 module.exports = nextConfig

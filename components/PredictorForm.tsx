@@ -26,7 +26,7 @@ export default function PredictorForm() {
   // Load API base URL from runtime config with fallbacks
   useEffect(() => {
     // Start with env or localhost, then allow config to override
-    const envUrl = (process as any).env?.NEXT_PUBLIC_PREDICT_API as string | undefined
+    const envUrl = process.env.NEXT_PUBLIC_PREDICT_API as string | undefined
     const fallback = (envUrl && envUrl.replace(/\/$/, '')) || 'http://localhost:8000'
     setApiBase(fallback)
 
