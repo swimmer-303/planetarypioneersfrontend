@@ -122,7 +122,33 @@ Custom animations are defined in the Tailwind config:
 
 ## Deployment
 
-The app is ready for deployment on Vercel:
+### GitHub Pages (recommended for this repo)
+
+This app is configured to export static files and deploy to GitHub Pages.
+
+Steps:
+
+1. Push to `main`. A workflow will build and deploy automatically.
+2. In your repository settings:
+   - Go to Settings → Pages
+   - Set Source to "GitHub Actions"
+3. Your site will be available at `https://<your-username>.github.io/<repo-name>/`.
+
+Notes:
+
+- The build uses `NEXT_PUBLIC_BASE_PATH=/repo-name` so routes and assets work on Pages.
+- A `.nojekyll` file is created to prevent Jekyll processing of the `out/` export.
+- If you rename the repository, the workflow will adapt automatically.
+
+Local test with base path:
+
+```bash
+NEXT_PUBLIC_BASE_PATH=/repo-name npm run build && npx serve -s out
+```
+
+### Vercel
+
+Alternatively, you can deploy on Vercel:
 
 1. Push your code to GitHub
 2. Connect your repository to Vercel
