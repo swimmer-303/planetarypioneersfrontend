@@ -24,8 +24,14 @@ async function initModel(baseUrl) {
   const p = await ensurePyodide()
   const modelBase = baseUrl || DEFAULT_BASE
 
+  // Ensure required scientific stack is available
+  try {
+    await p.loadPackage(["numpy", "pandas", "scipy", "scikit-learn", "joblib"]) // python wheels prebuilt in pyodide repo
+  } catch (e) {
+    throw new Error("Failed loading Pyodide packages: " + String(e))
+  }
+
   const code = `
-import js
 from pyodide.http import pyfetch
 import os, json
 import pandas as pd
@@ -56,7 +62,7 @@ async def init(model_base):
         schema = json.load(f)
     return model, schema
 
-model, schema = await init(js.modelBase)
+model, schema = await init(MODEL_BASE)
 
 def predict_one(payload: dict, threshold: float = 0.5):
     cols = schema['feature_cols']
@@ -67,7 +73,7 @@ def predict_one(payload: dict, threshold: float = 0.5):
     return { 'proba': proba, 'pred': pred }
   `
 
-  p.globals.set('modelBase', modelBase)
+  p.globals.set('MODEL_BASE', modelBase)
   await p.runPythonAsync(code)
   initialized = true
 }

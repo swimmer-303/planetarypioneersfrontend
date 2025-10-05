@@ -1,13 +1,12 @@
 import { } from 'react'
 import dynamic from 'next/dynamic'
-
-const NativePredictor = dynamic(() => import('@/components/NativePredictor'), { ssr: false })
+const PredictorForm = dynamic(() => import('@/components/PredictorForm'), { ssr: false })
 
 export default function PredictionPage() {
   const envUrl = process.env.NEXT_PUBLIC_PREDICTOR_URL
   const predictorUrl = envUrl && /^https?:\/\//.test(envUrl)
     ? envUrl
-    : "https://exoplanet-predictor-6yxqfjumnz8ntvrfhwjgzg.streamlit.app/"
+    : "https://exoplanet-predictor-planetarypioneers.streamlit.app/"
 
   const showPlaceholder = !predictorUrl || predictorUrl === "https://"
 
@@ -18,9 +17,9 @@ export default function PredictionPage() {
         Enter KOI-like parameters or upload a CSV to estimate candidate probability.
       </p>
 
-      {/* Native predictor (Pyodide) */}
+      {/* Native form that posts to backend API if configured */}
       <div className="mb-8">
-        <NativePredictor />
+        <PredictorForm />
       </div>
 
       {showPlaceholder ? (

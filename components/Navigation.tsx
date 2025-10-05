@@ -32,7 +32,7 @@ export default function Navigation() {
         </svg>
       )
     },
-    { name: 'Detection', href: '/detection', icon: Brain },
+    // Removed Detection; only Prediction remains
     { name: 'Prediction', href: '/prediction', icon: Brain },
     { name: 'Database', href: '/database', icon: Database },
     { name: 'About', href: '/about', icon: Info },

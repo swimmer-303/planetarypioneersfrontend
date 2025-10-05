@@ -28,7 +28,7 @@ export default function NativePredictor() {
 
   useEffect(() => {
     setError(null)
-    const worker = new Worker('/native-predictor-worker.v2.js')
+    const worker = new Worker('/native-predictor-worker.v2.js?v=2')
     workerRef.current = worker
     worker.onmessage = (e: MessageEvent) => {
       const { type, result: res, error: err, schema: sch } = e.data || {}
@@ -50,6 +50,9 @@ export default function NativePredictor() {
       }
     }
     worker.postMessage({ type: 'init', payload: { baseUrl: modelBase } })
+    worker.onerror = (err) => {
+      setError(String((err && (err as any).message) || err))
+    }
     return () => {
       worker.terminate()
       workerRef.current = null
