@@ -8,7 +8,7 @@ export default function PredictionPage() {
       const envUrl = (process as any).env.NEXT_PUBLIC_PREDICTOR_URL as string | undefined
       if (envUrl && /^https?:\/\//.test(envUrl)) return envUrl
     }
-    return "https://"
+    return "https://exoplanet-predictor-6yxqfjumnz8ntvrfhwjgzg.streamlit.app/"
   }, [])
 
   const showPlaceholder = !predictorUrl || predictorUrl === "https://"
