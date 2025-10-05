@@ -10,10 +10,11 @@ const DEFAULT_BASE = 'https://raw.githubusercontent.com/tobywooo/exoplanet-predi
 
 async function ensurePyodide() {
   if (pyodide) return pyodide
-  importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js')
+  // Use Pyodide 0.24.x which runs Python 3.11
+  importScripts('https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js')
   // eslint-disable-next-line no-undef
   pyodide = await loadPyodide({
-    indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'
+    indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/'
   })
   return pyodide
 }
@@ -26,7 +27,6 @@ async function initModel(baseUrl) {
   const code = `
 import js
 from pyodide.http import pyfetch
-import micropip
 import os, json
 import pandas as pd
 import joblib
