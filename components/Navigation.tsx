@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { asset } from './asset'
 import { Menu, X, Space, Brain, Database, Info, LucideIcon } from 'lucide-react'
 import { useLoading } from './LoadingProvider'
 
@@ -43,7 +44,7 @@ export default function Navigation() {
           {/* Logo */}
           <Link href="/" className="flex items-center" onClick={handleNavigation}>
             <Image
-              src="/logo-transparent.png"
+              src={asset('/logo-transparent.png')}
               alt="Planetary Pioneers Logo"
               width={120}
               height={32}

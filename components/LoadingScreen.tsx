@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { asset } from './asset'
 
 interface LoadingScreenProps {
   isLoading: boolean
@@ -58,7 +59,7 @@ export default function LoadingScreen({ isLoading, onLoadingComplete }: LoadingS
         {/* Logo */}
         <div className="mb-8">
           <Image
-            src="/logo-transparent.png"
+            src={asset('/logo-transparent.png')}
             alt="Planetary Pioneers Logo"
             width={200}
             height={53}

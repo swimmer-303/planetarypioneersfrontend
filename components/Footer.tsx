@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { asset } from './asset'
 
 export default function Footer() {
   return (
@@ -7,7 +8,7 @@ export default function Footer() {
         <div className="text-center">
           <div className="flex items-center justify-center mb-4">
             <Image
-              src="/logo-transparent.png"
+              src={asset('/logo-transparent.png')}
               alt="Planetary Pioneers Logo"
               width={150}
               height={40}
