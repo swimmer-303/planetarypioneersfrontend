@@ -28,7 +28,7 @@ export default function NativePredictor() {
 
   useEffect(() => {
     setError(null)
-    const worker = new Worker('/native-predictor-worker.js')
+    const worker = new Worker('/native-predictor-worker.v2.js')
     workerRef.current = worker
     worker.onmessage = (e: MessageEvent) => {
       const { type, result: res, error: err, schema: sch } = e.data || {}
