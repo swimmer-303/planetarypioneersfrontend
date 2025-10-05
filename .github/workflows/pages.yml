@@ -35,7 +35,7 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: "" # custom domain at root
         run: |
           npm run build
-          npx next export
+          mkdir -p out
           touch out/.nojekyll
           echo "findanexoplanet.com" > out/CNAME
 
