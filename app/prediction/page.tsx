@@ -1,6 +1,9 @@
 "use client"
 
 import { useMemo } from 'react'
+import dynamic from 'next/dynamic'
+
+const NativePredictor = dynamic(() => import('@/components/NativePredictor'), { ssr: false })
 
 export default function PredictionPage() {
   const predictorUrl = useMemo(() => {
@@ -19,6 +22,11 @@ export default function PredictionPage() {
       <p className="text-gray-300 mb-6">
         Enter KOI-like parameters or upload a CSV to estimate candidate probability.
       </p>
+
+      {/* Native predictor (Pyodide) */}
+      <div className="mb-8">
+        <NativePredictor />
+      </div>
 
       {showPlaceholder ? (
         <div className="rounded-lg border border-space-purple/30 bg-space-navy/60 p-6 text-gray-300">
