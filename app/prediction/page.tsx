@@ -1,18 +1,13 @@
-"use client"
-
-import { useMemo } from 'react'
+import { } from 'react'
 import dynamic from 'next/dynamic'
 
 const NativePredictor = dynamic(() => import('@/components/NativePredictor'), { ssr: false })
 
 export default function PredictionPage() {
-  const predictorUrl = useMemo(() => {
-    if (typeof window !== 'undefined') {
-      const envUrl = (process as any).env.NEXT_PUBLIC_PREDICTOR_URL as string | undefined
-      if (envUrl && /^https?:\/\//.test(envUrl)) return envUrl
-    }
-    return "https://exoplanet-predictor-6yxqfjumnz8ntvrfhwjgzg.streamlit.app/"
-  }, [])
+  const envUrl = process.env.NEXT_PUBLIC_PREDICTOR_URL
+  const predictorUrl = envUrl && /^https?:\/\//.test(envUrl)
+    ? envUrl
+    : "https://exoplanet-predictor-6yxqfjumnz8ntvrfhwjgzg.streamlit.app/"
 
   const showPlaceholder = !predictorUrl || predictorUrl === "https://"
 
