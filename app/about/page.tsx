@@ -26,7 +26,7 @@ export default function AboutPage() {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="text-white">What is an</span> <span className="text-gradient">Exoplanet</span>?
+            <span className="text-white">What is an</span> <span className="text-gradient">Exoplanet</span><span className="text-white">?</span>
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Understanding the worlds beyond our solar system
