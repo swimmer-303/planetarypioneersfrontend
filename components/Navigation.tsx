@@ -33,6 +33,7 @@ export default function Navigation() {
       )
     },
     { name: 'Detection', href: '/detection', icon: Brain },
+    { name: 'Prediction', href: '/prediction', icon: Brain },
     { name: 'Database', href: '/database', icon: Database },
     { name: 'About', href: '/about', icon: Info },
     { name: 'Documentation', href: '/documentation', icon: () => (
