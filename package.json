@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "export": "next build && mkdir -p out && touch out/.nojekyll",
+    "export:gh": "next build && rm -rf docs && mkdir -p docs && cp -R out/* docs/ && touch docs/.nojekyll",
     "deploy": "npm run export && firebase deploy"
   },
   "dependencies": {
