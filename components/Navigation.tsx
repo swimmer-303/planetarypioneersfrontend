@@ -35,6 +35,14 @@ export default function Navigation() {
     { name: 'Detection', href: '/detection', icon: Brain },
     { name: 'Database', href: '/database', icon: Database },
     { name: 'About', href: '/about', icon: Info },
+    { name: 'Documentation', href: '/documentation', icon: () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 2.75h7.5L18.5 7.75V21.25a.75.75 0 0 1-.75.75H6.75A.75.75 0 0 1 6 21.25V2.75z" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M13.5 2.75v4.5h5" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M8.75 12h6.5" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M8.75 15.5h6.5" stroke="currentColor" strokeWidth="1.5"/>
+      </svg>
+    ) },
   ]
 
   return (
